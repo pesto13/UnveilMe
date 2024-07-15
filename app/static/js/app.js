@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     readyButton.addEventListener('click', () => {
-        socket.emit('change_is_ready', {
+        socket.emit('toogle_is_ready', {
             username: usernameInput.value,
             lobby_id: lobbyIdInput.value
         });

@@ -10,17 +10,15 @@ def register_events(socketio):
 
     @socketio.on('message')
     def handle_message(message):
-        print(f"Received message: {message}")
         send(f"Echo: {message}", broadcast=True)
 
     @socketio.on('connect')
     def handle_connect():
-        print('Client connected')
         emit('message', 'Welcome to the WebSocket server!')
 
     @socketio.on('disconnect')
     def handle_disconnect():
-        print('Client disconnected')
+        pass
 
     #############
 
@@ -30,7 +28,6 @@ def register_events(socketio):
         lobby_id = data.get('lobby_id')
         player = Player(username=username, points=0, is_ready=False)
         this_lobby = lobbies.setdefault(lobby_id, Lobby(lobby_id))
-
         if username in this_lobby.players:
             send('You cant rejoin the room')
             return
@@ -59,7 +56,7 @@ def register_events(socketio):
         if len(lobbies[lobby_id].players) == 0:
             del lobbies[lobby_id]
 
-    @socketio.on('toggle_ready')
+    @socketio.on('toogle_is_ready')
     def on_toggle_ready(data):
         username = data.get('username')
         lobby_id = data.get('lobby_id')
@@ -105,5 +102,4 @@ def register_events(socketio):
 
 def start_game(lobby_id):
     # Logica per iniziare la partita
-    print(f"Starting game in lobby {lobby_id}")
     emit('start_game', 'The game has started!', room=lobby_id)
