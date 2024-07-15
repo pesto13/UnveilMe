@@ -1,48 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Flask WebSocket Server</title>
-    <!-- Carica la libreria Socket.IO dal CDN -->
-    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Flask WebSocket Server</h1>
-    <p>WebSocket server is running. Send a message below to test the WebSocket connection.</p>
-    <input type="text" id="messageInput" placeholder="Type a message">
-    <button id="sendButton">Send</button>
-    <input type="text" id="roomInput" placeholder="Room to join/leave">
-    <button id="joinButton">Join Room</button>
-    <button id="leaveButton">Leave Room</button>
-    <div id="response"></div>
+    <h1>WebSocket Game Lobby</h1>
+    <div id="status"></div>
+    <div id="messages"></div>
 
-    <script type="text/javascript">
-        // Crea una connessione Socket.IO al server
-        const socket = io();
+    <div id="form-container">
+        <input type="text" id="username" placeholder="Username" />
+        <input type="text" id="lobby_id" placeholder="Lobby ID" />
+        <button id="join">Join Lobby</button>
+        <button id="leave">Leave Lobby</button>
+        <button id="ready">Toggle Ready</button>
+        <button id="update_points">Update Points</button>
+    </div>
 
-        // Gestisci i messaggi ricevuti dal server
-        socket.on('message', (data) => {
-            document.getElementById('response').textContent = `Server says: ${data}`;
-        });
-
-        // Gestisci l'evento di connessione
-        socket.on('connect', () => {
-            console.log('Connected to WebSocket server');
-        });
-
-        // Gestisci l'evento di disconnessione
-        socket.on('disconnect', () => {
-            console.log('Disconnected from WebSocket server');
-        });
-
-        // Aggiungi un listener per il pulsante "Send"
-        document.getElementById('sendButton').addEventListener('click', () => {
-            const message = document.getElementById('messageInput').value;
-            if (message) {
-                socket.send(message);
-                document.getElementById('messageInput').value = '';
-            }
-        });
-
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
