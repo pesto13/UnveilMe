@@ -1,0 +1,92 @@
+from flask_socketio import send, emit, join_room, leave_room
+from .classes.lobby import Lobby, Player
+
+from collections import defaultdict
+
+lobbies = defaultdict(lambda: Lobby(id=""))
+
+
+def register_events(socketio):
+
+    @socketio.on('message')
+    def handle_message(message):
+        print(f"Received message: {message}")
+        send(f"Echo: {message}", broadcast=True)
+
+    @socketio.on('connect')
+    def handle_connect():
+        print('Client connected')
+        emit('message', 'Welcome to the WebSocket server!')
+
+    @socketio.on('disconnect')
+    def handle_disconnect():
+        print('Client disconnected')
+
+    #############
+
+    @socketio.on('join')
+    def on_join(data):
+        username = data.get('username')
+        lobby_id = data.get('lobby_id')
+        join_room(lobby_id)
+        player = Player(username=username, points=0, is_ready=False)
+        lobbies.setdefault(lobby_id, Lobby(lobby_id))
+        lobbies[lobby_id].players[username] = player
+        send(
+            f'{username} has joined the lobby {lobby_id}',
+            room=lobby_id
+        )
+
+    @socketio.on('leave')
+    def on_leave(data):
+        username = data.get('username')
+        lobby_id = data.get('lobby_id')
+        leave_room(lobby_id)
+        if lobby_id in lobbies:
+            del lobbies[lobby_id].players[username]
+            send(
+                f'{username} has left the lobby {lobby_id}',
+                room=lobby_id
+            )
+
+    @socketio.on('change_is_ready')
+    def on_change_is_ready(data):
+        username = data.get('username')
+        lobby_id = data.get('lobby_id')
+        if lobby_id in lobbies:
+            lobbies[lobby_id].players[username].is_ready = not (
+                lobbies[lobby_id].players[username].is_ready)
+
+            send(
+                f'{username} is {
+                    "ready" if lobbies[lobby_id].players[username].is_ready
+                    else "preparing"}',
+                room=lobby_id
+            )
+            if all(p.is_ready for p in lobbies[lobby_id].players.values()):
+                send(
+                    'All players are ready. The game will start now!',
+                    room=lobby_id
+                )
+                start_game(lobby_id)
+
+    ##############
+
+    @socketio.on('update_points')
+    def on_update_points(data):
+        username = data.get('username')
+        lobby_id = data.get('lobby_id')
+
+        if lobby_id in lobbies:
+            lobbies[lobby_id].players[username].points += 1
+            send(
+                f'{username} now has {
+                    lobbies[lobby_id].players[username].points} points',
+                room=lobby_id
+            )
+
+
+def start_game(lobby_id):
+    # Logica per iniziare la partita
+    print(f"Starting game in lobby {lobby_id}")
+    emit('start_game', 'The game has started!', room=lobby_id)

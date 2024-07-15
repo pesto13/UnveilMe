@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>WebSocket Game Lobby</h1>
+    <div id="status"></div>
+    <div id="messages"></div>
+
+    <div id="form-container">
+        <input type="text" id="username" placeholder="Username" />
+        <input type="text" id="lobby_id" placeholder="Lobby ID" />
+        <button id="join">Join Lobby</button>
+        <button id="leave">Leave Lobby</button>
+        <button id="ready">Toggle Ready</button>
+        <button id="update_points">Update Points</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
