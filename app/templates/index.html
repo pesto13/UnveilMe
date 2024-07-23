@@ -3,24 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebSocket Game</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>UnveilMe</title>
 </head>
 <body>
-    <h1>WebSocket Game Lobby</h1>
-    <div id="status"></div>
-    <div id="messages"></div>
+    <h1>UnveilMe Lobby</h1>
 
     <div id="form-container">
         <input type="text" id="username" placeholder="Username" />
-        <input type="text" id="lobby_id" placeholder="Lobby ID" />
-        <button id="join">Join Lobby</button>
+        <input type="text" id="lobby_name" placeholder="Lobby name" />
+        <button id="create">Create Lobby</button>
         <button id="leave">Leave Lobby</button>
         <button id="ready">Toggle Ready</button>
-        <button id="update_points">Update Points</button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

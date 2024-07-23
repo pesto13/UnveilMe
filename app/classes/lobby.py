@@ -8,7 +8,6 @@ class Player:
 
 class Lobby:
 
-    def __init__(self, id: int, turns: int = 10) -> None:
-        self.id = id
+    def __init__(self, turns: int = 10) -> None:
         self.turns = turns
         self.players = {}
