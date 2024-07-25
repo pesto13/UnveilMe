@@ -25,16 +25,30 @@ def register_events(socketio):
             return
 
         lobbies[lobby_name] = Lobby()
-        print('Current lobbies:', list(lobbies.keys()))
         emit('lobby_created', {'lobby_name': lobby_name})
+        lobbies[lobby_name].players[username] = Player(username, 0, False)
 
     @socketio.event
-    def join_lobby(data):
-        pass
+    def join_lobby(username, lobby_name):
+        if username in lobbies[lobby_name].players:
+            print('gia presente')
+
+        lobbies[lobby_name].players[username] = Player(username, 0, False)
 
     @socketio.event
-    def leave_lobby(data):
-        pass
+    def leave_lobby(username, lobby_name):
+        if username not in lobbies[lobby_name].players:
+            print('non presente')
+
+        del lobbies[lobby_name].players[username]
+
+    @socketio.event
+    def toggle_ready(username, lobby_name):
+        if username not in lobbies[lobby_name].players:
+            print('non presente')
+
+        is_ready = lobbies[lobby_name].players[username].is_ready
+        lobbies[lobby_name].players[username].is_ready != is_ready
 
     @socketio.event
     def start_game(data):

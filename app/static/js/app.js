@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const leaveButton = document.getElementById('leave');
     const readyButton = document.getElementById('ready');
 
+    const lobbiesContainer = document.getElementById('Lobbies-container');
+
     createButton.addEventListener('click', () => {
         const username = usernameInput.value;
         const lobbyName = lobbyNameInput.value;
@@ -20,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             console.log('inserisci valori')
         }
-
     });
+
+
 
 });
