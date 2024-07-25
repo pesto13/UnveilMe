@@ -3,6 +3,7 @@ import * as SocketModule from './socket.js'
 document.addEventListener('DOMContentLoaded', () => {
 
     SocketModule.setup_socket();
+    SocketModule.game_socket(updateLobbiesContainer);
 
     const usernameInput = document.getElementById('username');
     const lobbyNameInput = document.getElementById('lobby_name');
@@ -23,6 +24,22 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('inserisci valori')
         }
     });
+
+    // funzioni
+
+    function updateLobbiesContainer(lobbies) {
+        lobbiesContainer.innerHTML = '';
+        for (const [lobbyName, lobby] of Object.entries(lobbies)) {
+            const lobbyElement = document.createElement('div');
+            lobbyElement.classList.add('lobby');
+            lobbyElement.innerHTML = `
+                <h2>${lobbyName}</h2>
+                <p>Players: ${Object.keys(lobby.players).length}</p>
+                <button onclick="joinLobby('${lobbyName}')">Join Lobby</button>
+            `;
+            lobbiesContainer.appendChild(lobbyElement);
+        }
+    }
 
 
 
