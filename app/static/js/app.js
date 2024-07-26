@@ -31,12 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
         lobbiesContainer.innerHTML = '';
         for (const [lobbyName, lobby] of Object.entries(lobbies)) {
             const lobbyElement = document.createElement('div');
-            lobbyElement.classList.add('lobby');
+            lobbyElement.id = lobbyName;
             lobbyElement.innerHTML = `
                 <h2>${lobbyName}</h2>
                 <p>Players: ${Object.keys(lobby.players).length}</p>
-                <button onclick="joinLobby('${lobbyName}')">Join Lobby</button>
             `;
+            lobbyElement.addEventListener('click', () => {
+                const username = usernameInput.value.trim();
+                if (username !== '')
+                    SocketModule.join_lobby(username, lobbyName)
+            });
             lobbiesContainer.appendChild(lobbyElement);
         }
     }

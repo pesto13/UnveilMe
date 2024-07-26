@@ -2,7 +2,7 @@ import { io } from 'https://cdn.socket.io/4.7.5/socket.io.esm.min.js';
 
 const socket = io.connect('http://127.0.0.1:5000/');
 
-const setup_socket = ((updateLobbiesContainer) => {
+const setup_socket = (() => {
     socket.on('connect', () => {
         console.log('connesso');
     });
@@ -21,7 +21,7 @@ const game_socket = ((updateLobbiesContainer) => {
         console.log(data)
         console.log(data.lobbies)
         updateLobbiesContainer(data.lobbies);
-    })
+    });
 })
 
 

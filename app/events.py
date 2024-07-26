@@ -25,23 +25,22 @@ def register_events(socketio):
 
     @socketio.event
     def create_lobby(username, lobby_name):
-        print(lobby_name)
-        # Ensure that the lobby doesn't already exist
         if lobby_name in lobbies:
             send('Lobby already exists')
             return
 
         lobbies[lobby_name] = Lobby()
         emit('lobby_created', {'lobby_name': lobby_name})
-        emit('render_lobbies', {'lobbies': get_lobbies_data()})
         lobbies[lobby_name].players[username] = Player(username, 0, False)
+        emit('render_lobbies', {'lobbies': get_lobbies_data()})
 
     @socketio.event
     def join_lobby(username, lobby_name):
-        if username in lobbies[lobby_name].lobbies:
-            print('gia presente')
+        if username in lobbies[lobby_name].players:
+            return
 
         lobbies[lobby_name].players[username] = Player(username, 0, False)
+        print('sei dentro figo')
 
     @socketio.event
     def leave_lobby(username, lobby_name):
