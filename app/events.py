@@ -30,7 +30,7 @@ def register_events(socketio):
             return
 
         lobbies[lobby_name] = Lobby()
-        lobbies[lobby_name].players[username] = Player(username, 0, False)
+        # lobbies[lobby_name].players[username] = Player(username, 0, False)
         emit('render_lobbies', {'lobbies': get_lobbies_data()})
 
     @socketio.event
@@ -44,14 +44,14 @@ def register_events(socketio):
     @socketio.event
     def leave_lobby(username, lobby_name):
         if username not in lobbies[lobby_name].players:
-            print('non presente')
+            return
 
         del lobbies[lobby_name].players[username]
 
     @socketio.event
     def toggle_ready(username, lobby_name):
         if username not in lobbies[lobby_name].players:
-            print('non presente')
+            return
 
         is_ready = lobbies[lobby_name].players[username].is_ready
         lobbies[lobby_name].players[username].is_ready != is_ready

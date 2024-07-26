@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
             lobbyElement.addEventListener('click', () => {
                 const username = usernameInput.value.trim();
                 if (username !== '') {
-                    SocketModule.join_lobby(username, lobbyName)
                     window.location.href = `/lobby.html?lobbyName=${encodeURIComponent(lobbyName)}&username=${encodeURIComponent(username)}`;
+                    SocketModule.join_lobby(username, lobbyName)
                 }
             });
             lobbiesContainer.appendChild(lobbyElement);

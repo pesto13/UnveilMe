@@ -4,11 +4,11 @@ const socket = io.connect('http://127.0.0.1:5000/');
 
 const setup_socket = (() => {
     socket.on('connect', () => {
-        console.log('connesso');
+        console.log('connesso con: ', socket.id);
     });
 
     socket.on('disconnect', () => {
-        console.log('disconnesso');
+        console.log('disconnesso con: ', socket.id);
     });
 
     socket.on('message', message => {
@@ -27,8 +27,6 @@ const render_lobbies_socket = ((updateLobbiesContainer) => {
 const render_lobby_socket = ((renderLobbyContainer) => {
     console.log('eccoci2')
     socket.on('render_lobby', (data) => {
-        console.log(data);
-        console.log(data.lobby);
         renderLobbyContainer(data.lobby);
     });
 });
