@@ -3,13 +3,11 @@ import * as SocketModule from './socket.js'
 document.addEventListener('DOMContentLoaded', () => {
 
     SocketModule.setup_socket();
-    SocketModule.game_socket(updateLobbiesContainer);
+    SocketModule.render_lobbies_socket(updateLobbiesContainer);
 
     const usernameInput = document.getElementById('username');
     const lobbyNameInput = document.getElementById('lobby_name');
     const createButton = document.getElementById('create');
-    const leaveButton = document.getElementById('leave');
-    const readyButton = document.getElementById('ready');
 
     const lobbiesContainer = document.getElementById('Lobbies-container');
 
@@ -38,8 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             lobbyElement.addEventListener('click', () => {
                 const username = usernameInput.value.trim();
-                if (username !== '')
+                if (username !== '') {
                     SocketModule.join_lobby(username, lobbyName)
+                    window.location.href = `/lobby.html?lobbyName=${encodeURIComponent(lobbyName)}&username=${encodeURIComponent(username)}`;
+                }
             });
             lobbiesContainer.appendChild(lobbyElement);
         }

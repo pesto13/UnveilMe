@@ -30,7 +30,6 @@ def register_events(socketio):
             return
 
         lobbies[lobby_name] = Lobby()
-        emit('lobby_created', {'lobby_name': lobby_name})
         lobbies[lobby_name].players[username] = Player(username, 0, False)
         emit('render_lobbies', {'lobbies': get_lobbies_data()})
 
@@ -40,7 +39,7 @@ def register_events(socketio):
             return
 
         lobbies[lobby_name].players[username] = Player(username, 0, False)
-        print('sei dentro figo')
+        emit('render_lobby', {'lobby': lobbies[lobby_name].to_dict()})
 
     @socketio.event
     def leave_lobby(username, lobby_name):

@@ -16,14 +16,22 @@ const setup_socket = (() => {
     });
 });
 
-const game_socket = ((updateLobbiesContainer) => {
+// middleware
+const render_lobbies_socket = ((updateLobbiesContainer) => {
+    console.log('eccoci1')
     socket.on('render_lobbies', (data) => {
-        console.log(data)
-        console.log(data.lobbies)
         updateLobbiesContainer(data.lobbies);
     });
-})
+});
 
+const render_lobby_socket = ((renderLobbyContainer) => {
+    console.log('eccoci2')
+    socket.on('render_lobby', (data) => {
+        console.log(data);
+        console.log(data.lobby);
+        renderLobbyContainer(data.lobby);
+    });
+});
 
 //Creazione Lobby
 
@@ -58,4 +66,8 @@ const add_point = ((voted_player, lobbyName) => {
 });
 
 
-export { setup_socket, game_socket, create_lobby, join_lobby, leave_lobby, start_game, vote_player, add_point }
+export {
+    setup_socket, render_lobbies_socket, render_lobby_socket,
+    create_lobby, join_lobby, leave_lobby, toggle_ready,
+    start_game, vote_player, add_point
+}
