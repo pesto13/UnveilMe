@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleReadyButton = document.getElementById('toggleready');
     const playerContainer = document.getElementById('player-container');
 
-    SocketModule.render_lobby_socket(renderLobbyContainer);
+    // SocketModule.render_lobby_socket(renderLobbyContainer);
 
     function renderLobbyContainer(lobby) {
         console.log('diocane');
@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
             playerContainer.appendChild(playerElement);
         }
     }
-
 
     leaveButton.addEventListener('click', () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -40,3 +39,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
+

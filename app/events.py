@@ -24,16 +24,21 @@ def register_events(socketio):
     #############
 
     @socketio.event
-    def create_lobby(username, lobby_name):
+    def create_lobby(data):
+        # username = data['username']
+        lobby_name = data['lobby_name']
+
         if lobby_name in lobbies:
             send('Lobby already exists')
             return
 
         lobbies[lobby_name] = Lobby()
-        emit('render_lobbies', {'lobbies': get_lobbies_data()})
+        emit('render_lobbies', {'lobbies': get_lobbies_data()}, broadcast=True)
 
     @socketio.event
-    def join_lobby(username, lobby_name):
+    def join_lobby(data):
+        username = data['username']
+        lobby_name = data['lobby_name']
         if username in lobbies[lobby_name].players:
             return
 
@@ -42,10 +47,12 @@ def register_events(socketio):
 
         emit('render_lobby', {
             'lobby': lobbies[lobby_name].to_dict()
-        }, room=lobby_name)
+        }, to=lobby_name)
 
     @socketio.event
-    def leave_lobby(username, lobby_name):
+    def leave_lobby(data):
+        username = data['username']
+        lobby_name = data['lobby_name']
         if username not in lobbies[lobby_name].players:
             return
 
@@ -54,15 +61,17 @@ def register_events(socketio):
 
         emit('render_lobby', {
             'lobby': lobbies[lobby_name].to_dict()
-        }, room=lobby_name)
+        }, to=lobby_name)
 
     @socketio.event
-    def toggle_ready(username, lobby_name):
+    def toggle_ready(data):
+        username = data['username']
+        lobby_name = data['lobby_name']
         if username not in lobbies[lobby_name].players:
             return
 
-        is_ready = lobbies[lobby_name].players[username].is_ready
-        lobbies[lobby_name].players[username].is_ready != is_ready
+        p = lobbies[lobby_name].players[username]
+        p.is_ready = not p.is_ready
 
     @socketio.event
     def start_game(data):
@@ -71,6 +80,7 @@ def register_events(socketio):
     ##############
 
 
-def start_game(lobby_name):
+def start_game(data):
+    lobby_name = data['lobby_name']
     # Logica per iniziare la partita
-    emit('start_game', 'The game has started!', room=lobby_name)
+    emit('start_game', 'The game has started!', to=lobby_name)

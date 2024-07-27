@@ -4,15 +4,20 @@ const socket = io.connect('http://127.0.0.1:5000/');
 
 const setup_socket = (() => {
     socket.on('connect', () => {
-        console.log('connesso con: ', socket.id);
+        console.log('connesso');
     });
 
     socket.on('disconnect', () => {
-        console.log('disconnesso con: ', socket.id);
+        console.log('disconnesso');
     });
 
     socket.on('message', message => {
         alert(message);
+    });
+
+    socket.on('render_lobby', (data) => {
+        alert('diomerda');
+        console.log(data);
     });
 });
 
@@ -34,38 +39,39 @@ const render_lobby_socket = ((renderLobbyContainer) => {
 
 //Creazione Lobby
 
-const create_lobby = ((username, lobbyName) => {
-    socket.emit('create_lobby', username, lobbyName)
+const create_lobby = ((username, lobby_name) => {
+    socket.emit('create_lobby', { username, lobby_name })
 });
 
-const join_lobby = ((username, lobbyName) => {
-    socket.emit('join_lobby', username, lobbyName)
+const join_lobby = ((username, lobby_name) => {
+    socket.emit('join_lobby', { username, lobby_name })
 });
 
-const leave_lobby = ((username, lobbyName) => {
-    socket.emit('leave_lobby', username, lobbyName)
+const leave_lobby = ((username, lobby_name) => {
+    socket.emit('leave_lobby', { username, lobby_name })
 });
 
-const toggle_ready = ((username, lobbyName) => {
-    socket.emit('toggle_ready', username, lobbyName)
+const toggle_ready = ((username, lobby_name) => {
+    socket.emit('toggle_ready', { username, lobby_name })
 });
 
 // game - fase di gioco
 
-const start_game = ((lobbyName) => {
-    socket.emit('start_game', lobbyName)
+const start_game = ((lobby_name) => {
+    socket.emit('start_game', lobby_name)
 });
 
-const vote_player = ((username, voted_player, lobbyName) => {
-    socket.emit('vote_player', username, voted_player, lobbyName)
+const vote_player = ((username, voted_player, lobby_name) => {
+    socket.emit('vote_player', username, voted_player, lobby_name)
 });
 
-const add_point = ((voted_player, lobbyName) => {
-    socket.emit('vote_player', voted_player, lobbyName)
+const add_point = ((voted_player, lobby_name) => {
+    socket.emit('vote_player', voted_player, lobby_name)
 });
 
 
 export {
+    socket,
     setup_socket, render_lobbies_socket, render_lobby_socket,
     create_lobby, join_lobby, leave_lobby, toggle_ready,
     start_game, vote_player, add_point
