@@ -30,7 +30,6 @@ def register_events(socketio):
             return
 
         lobbies[lobby_name] = Lobby()
-        # lobbies[lobby_name].players[username] = Player(username, 0, False)
         emit('render_lobbies', {'lobbies': get_lobbies_data()})
 
     @socketio.event
@@ -39,7 +38,11 @@ def register_events(socketio):
             return
 
         lobbies[lobby_name].players[username] = Player(username, 0, False)
-        emit('render_lobby', {'lobby': lobbies[lobby_name].to_dict()})
+        join_room(lobby_name)
+
+        emit('render_lobby', {
+            'lobby': lobbies[lobby_name].to_dict()
+        }, room=lobby_name)
 
     @socketio.event
     def leave_lobby(username, lobby_name):
@@ -47,6 +50,11 @@ def register_events(socketio):
             return
 
         del lobbies[lobby_name].players[username]
+        leave_room(lobby_name)
+
+        emit('render_lobby', {
+            'lobby': lobbies[lobby_name].to_dict()
+        }, room=lobby_name)
 
     @socketio.event
     def toggle_ready(username, lobby_name):

@@ -26,7 +26,8 @@ const render_lobbies_socket = ((updateLobbiesContainer) => {
 
 const render_lobby_socket = ((renderLobbyContainer) => {
     console.log('eccoci2')
-    socket.on('render_lobby', (data) => {
+    socket.on('render_lobby', function (data) {
+        console.log('ma perche');
         renderLobbyContainer(data.lobby);
     });
 });

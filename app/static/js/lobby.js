@@ -24,12 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     leaveButton.addEventListener('click', () => {
-        SocketModule.leave_lobby('franco', 'xxx');
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+        const lobbyName = urlParams.get('lobbyName');
+        SocketModule.leave_lobby(username, lobbyName);
         window.location.href = `/`;
     });
 
     toggleReadyButton.addEventListener('click', () => {
-        SocketModule.toggle_ready('franco', 'xxx');
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+        const lobbyName = urlParams.get('lobbyName');
+        SocketModule.toggle_ready(username, lobbyName);
     });
 
 
