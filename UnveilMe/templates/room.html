@@ -4,6 +4,7 @@
     <title>Room {{ room }}</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="static/js/room.js"></script>
 </head>
 <body>
     <h1>Room: {{ room }}</h1>
@@ -12,33 +13,7 @@
     <button id="toggle">Toggle Status</button>
     <div id="users"></div>
     <script>
-        $(document).ready(function() {
-            var socket = io();
-            var room = "{{ room }}";
-            var username = "{{ username }}";
-
-            socket.emit('join', {username: username, room: room});
-
-            $('#leave').click(function() {
-                socket.emit('leave', {username: username, room: room});
-                window.location.href = '/';
-            });
-
-            $('#toggle').click(function() {
-                socket.emit('toggle_status', {username: username, room: room});
-            });
-
-            socket.on('update_users', function(users) {
-                $('#users').empty();
-                $.each(users, function(username, status) {
-                    $('#users').append('<p>' + username + ': ' + status + '</p>');
-                });
-            });
-
-            $(window).on('beforeunload', function() {
-                socket.emit('leave', {username: username, room: room});
-            });
-        });
+        
     </script>
 </body>
 </html>
