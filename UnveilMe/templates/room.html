@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Room {{ room }}</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/room.js"></script>
+</head>
+
+<body>
+    <h1>Room: {{ room }}</h1>
+    <h2>User: {{ username }}</h2>
+    <button id="leave">Leave Room</button>
+    <button id="toggle">Toggle Status</button>
+    <div id="users"></div>
+
+    <script>
+        // Pass Django variables to JavaScript
+        var room = "{{ room }}";
+        var username = "{{ username }}";
+    </script>
+
+
+</body>
+
+
+
+</html>
