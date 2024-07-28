@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/game.js"></script>
+</head>
+
+<body>
+
+    <h2 id="question">dai</h2>
+    
+    <div id="users-container">
+
+    </div>
+
+    <script>
+        var room = {{ room|tojson }} 
+        var username = {{ username|tojson }}
+    </script>
+</body>
+
+</html>

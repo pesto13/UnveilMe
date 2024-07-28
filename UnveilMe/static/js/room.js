@@ -15,7 +15,7 @@ $(document).ready(function () {
     socket.on('update_users', function (users) {
         $('#users').empty();
         $.each(users, function (username, status) {
-            console.log(status)
+            // console.log(status)
             const $pdiv = $('<div></div>');
             $pdiv.text(username + ': ' + status)
             $pdiv.attr('id', username)
@@ -24,7 +24,11 @@ $(document).ready(function () {
         });
     });
 
-    $(window).on('beforeunload', function () {
-        socket.emit('leave', { username: username, room: room });
+    socket.on('start_game', () => {
+        window.location.href = `/game/${room}/${username}`
     });
+
+    // $(window).on('beforeunload', function () {
+    //     socket.emit('leave', { username: username, room: room });
+    // });
 });

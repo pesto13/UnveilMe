@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify
-from flask_socketio import SocketIO, join_room, leave_room, emit
+from flask_socketio import SocketIO, join_room, leave_room, emit, send
 from .classes.classes import Room, User
 
 app = Flask(__name__)
@@ -7,6 +7,9 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 
 rooms: dict[str, Room] = {}
+
+
+# routes
 
 
 @app.route('/')
@@ -19,12 +22,22 @@ def room(room, username):
     return render_template('room.html', room=room, username=username)
 
 
-@app.route('/rooms')
+@app.route('/game/<room>/<username>')
+def game(room, username):
+    return render_template('game.html',
+                           room=room,
+                           username=username)
+
+
+@ app.route('/rooms')
 def get_rooms():
     return jsonify(list(rooms.keys()))
 
 
-@socketio.on('join')
+# handlers
+
+
+@ socketio.on('join')
 def handle_join(data):
     room_name = data['room']
     username = data['username']
@@ -41,7 +54,7 @@ def handle_join(data):
     emit('update_rooms', list(rooms.keys()), broadcast=True)
 
 
-@socketio.on('leave')
+@ socketio.on('leave')
 def handle_leave(data):
     room_name = data['room']
     username = data['username']
@@ -53,8 +66,7 @@ def handle_leave(data):
         if room.is_empty():
             del rooms[room_name]
 
-    emit('update_users', room.get_users()
-         if room_name in rooms else {}, room=room_name)
+    emit('update_users', room.get_users(), room=room_name)
     emit('update_rooms', list(rooms.keys()), broadcast=True)
 
 
@@ -67,3 +79,17 @@ def handle_toggle_status(data):
         user = rooms[room_name].users[username]
         user.toggle_status()
         emit('update_users', rooms[room_name].get_users(), room=room_name)
+
+        if all([d.is_ready for d in rooms[room_name].users.values()]):
+            #
+            # emit('fetch_question', qst, room=room_name)
+            emit('start_game', rooms[room_name].get_users(), room=room_name)
+            # send('lol', room=room_name)
+
+
+@socketio.on('ask_question')
+def handle_ask_question(data):
+    room_name = data['room']
+    qst = 'hello?'
+    emit('fetch_question', qst, room=room_name)
+    print('mandato')
