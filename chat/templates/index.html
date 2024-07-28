@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Room</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Chat Room</h1>
+    <div id="room-container">
+        <input type="text" id="username" placeholder="Username">
+        <input type="text" id="room" placeholder="Room">
+        <button id="join">Join Room</button>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#join').click(function() {
+                var username = $('#username').val();
+                var room = $('#room').val();
+                window.location.href = `/room/${room}/${username}`;
+            });
+        });
+    </script>
+</body>
+</html>
