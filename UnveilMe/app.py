@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO, join_room, leave_room, emit
 
 app = Flask(__name__)
