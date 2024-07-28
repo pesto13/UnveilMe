@@ -4,7 +4,7 @@ class User:
         self.is_ready = False
 
     def toggle_status(self):
-        self.is_ready = not self.status
+        self.is_ready = not self.is_ready
 
 
 class Room:

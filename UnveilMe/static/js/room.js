@@ -1,7 +1,5 @@
 $(document).ready(function () {
     const socket = io();
-    const room = "{{ room }}";
-    const username = "{{ username }}";
 
     socket.emit('join', { username: username, room: room });
 
@@ -17,7 +15,12 @@ $(document).ready(function () {
     socket.on('update_users', function (users) {
         $('#users').empty();
         $.each(users, function (username, status) {
-            $('#users').append('<p>' + username + ': ' + status + '</p>');
+            console.log(status)
+            const $pdiv = $('<div></div>');
+            $pdiv.text(username + ': ' + status)
+            $pdiv.attr('id', username)
+            $pdiv.css('background', status === true ? 'lightgreen' : 'lightcoral');
+            $('#users').append($pdiv);
         });
     });
 
