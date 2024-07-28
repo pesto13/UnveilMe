@@ -3,7 +3,6 @@
 <head>
     <title>Chat Rooms</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <h1>Chat Rooms</h1>
@@ -15,29 +14,48 @@
     <h2>Available Rooms:</h2>
     <div id="rooms"></div>
     <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             var socket = io();
 
-            $('#create').click(function() {
-                var username = $('#username').val();
-                var room = $('#room').val();
-                socket.emit('join', {username: username, room: room});
-                window.location.href = `/room/${room}/${username}`;
+            function setup(rooms){
+                var roomsContainer = document.getElementById('rooms');
+                roomsContainer.innerHTML = '';
+                rooms.forEach(function(room) {
+                    const roomElement = document.createElement('div');
+                    roomElement.id = room;
+                    roomElement.innerHTML = `
+                        <h2>${room}</h2>
+                    `;
+                    roomElement.addEventListener('click', () => {
+                        var username = document.getElementById('username').value;
+                        if (username !== '')
+                            window.location.href = `/room/${room}/${username}`;
+                    });
+                    roomsContainer.appendChild(roomElement);
+                });
+            }
+
+            document.getElementById('create').addEventListener('click', function() {
+                var username = document.getElementById('username').value;
+                var room = document.getElementById('room').value;
+                if (username !== '' && room !== '') {
+                    socket.emit('join', {username: username, room: room});
+                    window.location.href = `/room/${room}/${username}`;
+                } else {
+                    alert('Please enter both a username and a room name.');
+                }
             });
 
             socket.on('update_rooms', function(rooms) {
-                $('#rooms').empty();
-                rooms.forEach(function(room) {
-                    $('#rooms').append(`<p><a href="/room/${room}/${$('#username').val()}">${room}</a></p>`);
-                });
+                setup(rooms);
             });
 
             // Fetch existing rooms on page load
-            $.getJSON('/rooms', function(rooms) {
-                rooms.forEach(function(room) {
-                    $('#rooms').append(`<p><a href="/room/${room}/${$('#username').val()}">${room}</a></p>`);
+            fetch('/rooms')
+                .then(response => response.json())
+                .then(rooms => {
+                    setup(rooms);
                 });
-            });
         });
     </script>
 </body>
